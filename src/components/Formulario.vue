@@ -1,10 +1,27 @@
 <script setup>
-    import { ref } from 'vue'
+    import { reactive } from 'vue'
+    import Alerta from './Alerta.vue'
 
-    const nombre = ref('Max')
+    const alerta = reactive({
+        tipo:'',
+        mensaje:''
+    })
 
-    const leerNombre = e => {
-        nombre.value = e.target.value
+    const paciente = reactive({
+        nombre:'',
+        propietario:'',
+        email:'',
+        alta:'',
+        sintomas:''
+    }) //Reactive siempre es un objeto 
+
+    const validar = () => {
+        if(Object.values(paciente).includes('')){
+            alerta.mensaje = 'Todos los campos son obligatorios'
+            alerta.tipo = 'error'
+            return
+        }
+
     }
 </script>
 
@@ -16,8 +33,14 @@
             <span class="text-indigo-600 font-bold">Adminístralos</span>
         </p>
 
-        <form class="bg-white shadow-md rounded-lg py-10 px-5 mb-10">
-            {{ nombre }}
+        <Alerta
+            v-if="alerta.mensaje"
+            :alerta="alerta"
+        />
+        <form 
+        class="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
+        v-on:submit.prevent="validar"
+        >
             <div class="mb-5">
                 <label 
                 for="mascota"
@@ -31,8 +54,7 @@
                 id="mascota"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400-md"
                 placeholder="Nombre de la mascota"
-                :value="nombre"
-                @input="leerNombre"
+                v-model="paciente.nombre"
                 />
             </div>
 
@@ -49,6 +71,7 @@
                 id="propietario"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400-md"
                 placeholder="Nombre del propietario"
+                v-model="paciente.propietario"
                 />
             </div>
 
@@ -65,6 +88,7 @@
                 id="email"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400-md"
                 placeholder="E-mail del propietario"
+                v-model="paciente.email"
                 />
             </div>
 
@@ -80,6 +104,7 @@
                 type="date"
                 id="alta"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400-md"
+                v-model="paciente.alta"
                 />
             </div>
 
@@ -95,6 +120,7 @@
                 id="sintomas"
                 class="border-2 w-full p-2 mt-2 placeholder-gray-400-md h-40"
                 placeholder="Describe los sintomas"
+                v-model="paciente.sintomas"
                 />
             </div>
 
